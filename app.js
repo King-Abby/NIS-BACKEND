@@ -9,9 +9,8 @@ const corsMiddleware = require("./Middlewares/cors");
 
 const app = express();
 
-app.use(express.json());
 app.use(corsMiddleware);
-
+app.use(express.json());
 app.use("/api/auth", authRouter);
 
 dotenv.config({ path: ".env" });
