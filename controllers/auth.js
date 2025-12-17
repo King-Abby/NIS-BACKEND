@@ -1,8 +1,6 @@
 const User = require("../models/user");
 
-// =======================
-// SIGN UP
-// =======================
+
 const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -50,9 +48,7 @@ const signup = async (req, res) => {
   }
 };
 
-// =======================
-// LOGIN
-// =======================
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;

@@ -4,13 +4,17 @@ const connectDB = require("./Config/connectDb");
 const bcrypt = require("bcrypt");
 const colors = require("colors");
 
-const authRouter = require("./routes/user");
+const authRouter = require("./routes/auth");
 const corsMiddleware = require("./Middlewares/cors");
 
 const app = express();
 
-app.use(corsMiddleware);
 app.use(express.json());
+
+app.use(express.urlencoded({ extended: true }));
+
+app.use(corsMiddleware);
+
 app.use("/api/auth", authRouter);
 
 dotenv.config({ path: ".env" });
