@@ -1,9 +1,9 @@
 const cors = require("cors");
 
 const corsMiddleware = cors({
-  origin: "http://localhost:5173", 
+  origin: "https://nis-frontend-eight.vercel.app/",
   methods: ["POST", "OPTIONS"],
-  credentials: true, 
+  credentials: true,
 });
 
 module.exports = corsMiddleware;
