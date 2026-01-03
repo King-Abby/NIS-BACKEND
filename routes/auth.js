@@ -1,6 +1,6 @@
 const express = require("express");
 const { signup, login } = require("../controllers/auth");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 
 const router = express.Router();
 

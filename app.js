@@ -1,30 +1,29 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./Config/connectDb");
-const bcrypt = require("bcrypt");
 const colors = require("colors");
 
 const authRouter = require("./routes/auth");
 const corsMiddleware = require("./Middlewares/cors");
 
+dotenv.config({ path: ".env" });
+
 const app = express();
 
-app.use(express.json());
+/* ✅ CORS MUST COME FIRST */
+app.use(corsMiddleware);
+app.options("*", corsMiddleware); // ✅ allow preflight requests
 
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(corsMiddleware);
-
+/* Routes */
 app.use("/api/auth", authRouter);
-
-dotenv.config({ path: ".env" });
 
 connectDB();
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 
-const server = app.listen(
-  port,
-  console.log(`Server running on port ${port}`.yellow.bold)
-);
-// sqQrtmiLxpVrByKk
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`.yellow.bold);
+});

@@ -1,11 +1,9 @@
 const User = require("../models/user");
 
-
 const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Validate input
     if (!name || !email || !password) {
       return res.status(400).json({
         success: false,
@@ -13,7 +11,6 @@ const signup = async (req, res) => {
       });
     }
 
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
@@ -22,25 +19,19 @@ const signup = async (req, res) => {
       });
     }
 
-    // Create user (password will be hashed by schema)
-    const user = await User.create({
-      name,
-      email,
-      password,
-    });
+    const user = await User.create({ name, email, password });
 
-    // Send safe response (NO password)
     return res.status(201).json({
       success: true,
-      message: "User created successfully",
+      message: "Signup successful",
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
       },
     });
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error("Signup error:", error);
     return res.status(500).json({
       success: false,
       message: "Server error",
@@ -48,12 +39,10 @@ const signup = async (req, res) => {
   }
 };
 
-
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Validate input
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -61,7 +50,6 @@ const login = async (req, res) => {
       });
     }
 
-    // Find user
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({
@@ -70,7 +58,6 @@ const login = async (req, res) => {
       });
     }
 
-    // Check password
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
       return res.status(401).json({
@@ -79,7 +66,6 @@ const login = async (req, res) => {
       });
     }
 
-    // Successful login response
     return res.status(200).json({
       success: true,
       message: "Login successful",
@@ -89,8 +75,8 @@ const login = async (req, res) => {
         email: user.email,
       },
     });
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error("Login error:", error);
     return res.status(500).json({
       success: false,
       message: "Server error",
@@ -98,7 +84,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = {
-  signup,
-  login,
-};
+module.exports = { signup, login };
