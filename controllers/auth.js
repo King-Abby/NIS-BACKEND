@@ -24,7 +24,7 @@ const signup = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({
         success: false,
-        message: "User already exists",
+        message: "Email already exists",
       });
     }
 
@@ -41,9 +41,10 @@ const signup = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Signup error:", error);
+    // 4️⃣ Log full error for debugging
+    console.error("Signup FULL ERROR:", error);
 
-    // 4️⃣ Handle duplicate key error
+    // 5️⃣ Handle duplicate key error (email already exists)
     if (error.code === 11000) {
       return res.status(400).json({
         success: false,
@@ -51,7 +52,7 @@ const signup = async (req, res) => {
       });
     }
 
-    // 5️⃣ Handle validation errors
+    // 6️⃣ Handle Mongoose validation errors
     if (error.name === "ValidationError") {
       const firstError = Object.values(error.errors)[0].message;
       return res.status(400).json({
@@ -60,10 +61,11 @@ const signup = async (req, res) => {
       });
     }
 
-    // 6️⃣ Catch-all
+    // 7️⃣ Catch-all for any other error
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: error.message || "Internal server error",
+      stack: error.stack, // optional: you can remove this in production
     });
   }
 };
